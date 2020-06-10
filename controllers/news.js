@@ -36,8 +36,13 @@ const patch = (req, res) => {
 };
 
 const del = (req, res) => {
-  console.log(req.params.id);
-  res.sendStatus(200);
+  News.findByIdAndDelete(req.params.id, (err, doc) => {
+    if (err) return console.log(err);
+    News.find({}, (err, doc) => {
+      if (err) return console.log(err);
+      res.json(doc);
+    });
+  });
 };
 
 module.exports = { get, post, patch, del };
