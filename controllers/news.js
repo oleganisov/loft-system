@@ -1,7 +1,7 @@
 const News = require('../models/news');
 
 const get = (req, res) => {
-  News.find({}, 'title', (err, doc) => {
+  News.find({}, (err, doc) => {
     if (err) return console.log(err);
     res.json(doc);
   });
@@ -10,11 +10,9 @@ const post = (req, res) => {
   const { text, title } = req.body;
 
   News.create({ title, text }, (err, doc) => {
-    if (err) {
-      console.log(err);
-      res.sendStatus(400);
-    }
+    if (err) return console.log(err);
     console.log('Сохранен объект:', doc);
+
     News.find({}, (err, doc) => {
       if (err) return console.log(err);
       res.json(doc);
@@ -23,9 +21,20 @@ const post = (req, res) => {
 };
 const patch = (req, res) => {
   const { text, title } = req.body;
-  console.log(text, title, req.params.id);
-  res.sendStatus(200);
+
+  News.findByIdAndUpdate(
+    req.params.id,
+    { $set: { title, text } },
+    (err, doc) => {
+      if (err) return console.log(err);
+      News.find({}, (err, doc) => {
+        if (err) return console.log(err);
+        res.json(doc);
+      });
+    }
+  );
 };
+
 const del = (req, res) => {
   console.log(req.params.id);
   res.sendStatus(200);
