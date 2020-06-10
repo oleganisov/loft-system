@@ -1,7 +1,12 @@
+const Users = require('../models/users');
+
 const post = (req, res) => {
   const { username, password } = req.body;
-  console.log(username, password);
-  res.sendStatus(200);
+
+  Users.findOne({ username, password }, (err, doc) => {
+    if (err) return console.log(err);
+    res.json(doc);
+  });
 };
 
 module.exports = { post };
