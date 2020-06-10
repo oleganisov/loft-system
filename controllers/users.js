@@ -1,10 +1,14 @@
+const Users = require('../models/users');
+
 const get = (req, res) => {
   res.send('users');
 };
 
 const del = (req, res) => {
-  console.log(req.params.id);
-  res.sendStatus(200);
+  Users.findByIdAndDelete(req.params.id, (err, doc) => {
+    if (err) return console.log(err);
+    res.json(doc);
+  });
 };
 
 const patch = (req, res) => {

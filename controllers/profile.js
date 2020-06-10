@@ -1,5 +1,10 @@
+const Users = require('../models/users');
+
 const get = (req, res) => {
-  res.send('profile');
+  Users.find({}, (err, doc) => {
+    if (err) return console.log(err);
+    res.json(doc);
+  });
 };
 
 const patch = (req, res) => {
