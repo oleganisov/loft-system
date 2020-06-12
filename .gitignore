@@ -40,6 +40,5 @@ public
 node_modules
 npm-debug.log
 
-config
-db.json
+config.json
 *.env
