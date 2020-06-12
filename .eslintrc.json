@@ -12,6 +12,7 @@
     "indent": [2, 2],
     "quotes": [2, "single"],
     "semi": [2, "always"],
-    "no-console": "off"
+    "no-console": "off",
+    "space-before-function-paren": 0
   }
 }

@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const createError = require('http-errors');
 const path = require('path');
 require('dotenv').config();
+const { ErrorHandler, handleError } = require('./helpers/error');
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -14,11 +14,11 @@ app.use('/api', require(path.join(__dirname, 'api')));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(createError(404));
+  throw new ErrorHandler(404, 'Page not found');
 });
 // error handler
 app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({ message: err.message, error: err });
+  handleError(err, res);
 });
 
 mongoose.connect(
