@@ -1,11 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
 const { ErrorHandler, handleError } = require('./helpers/error');
 
-const port = process.env.PORT || 5000;
 const app = express();
+require('./models');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -32,13 +31,8 @@ app.use((err, req, res, next) => {
   handleError(err, res);
 });
 
-mongoose.connect(
-  `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err) => {
-    if (err) return console.log(err);
-    app.listen(port, () => {
-      console.log(`Server listen on port ${port}`);
-    });
-  }
-);
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log(`Server listen on port ${port}`);
+});
