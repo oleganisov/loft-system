@@ -5,7 +5,8 @@ const uri = process.env.DB_URI;
 mongoose.Promise = global.Promise;
 mongoose.connect(uri, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true
 });
 
 mongoose.connection.on('connected', () => {

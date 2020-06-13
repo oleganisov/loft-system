@@ -1,4 +1,7 @@
 const Users = require('../models/users');
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const secret = require('../config/config.json').secret;
 
 const post = (req, res) => {
   const { username, password } = req.body;

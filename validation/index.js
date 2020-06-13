@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const { ErrorHandler } = require('./helpers/error');
+const { ErrorHandler, handleError } = require('../helpers/error');
 
 const validUser = (req, res, next) => {
   const schema = Joi.object({
@@ -10,8 +10,8 @@ const validUser = (req, res, next) => {
 
   if (error) {
     const message = error.details.map((el) => el.message).join('; ');
-
-    return new ErrorHandler(400, message);
+    const validError = new ErrorHandler(400, message);
+    return handleError(validError, res);
   }
   next();
 };
