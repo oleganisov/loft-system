@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 const { ErrorHandler, handleError } = require('../helpers/error');
 
-const validUser = (req, res, next) => {
+const validateUser = (req, res, next) => {
   const schema = Joi.object({
     username: Joi.string().required().alphanum().min(3).max(100),
     password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
@@ -16,4 +16,4 @@ const validUser = (req, res, next) => {
   next();
 };
 
-module.exports = { validUser };
+module.exports = { validateUser };
