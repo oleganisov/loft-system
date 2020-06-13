@@ -2,17 +2,18 @@ const Users = require('../models/users');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const secret = require('../config/config.json').secret;
-const { ErrorHandler, handleError } = require('../helpers/error');
+const { ErrorHandler } = require('../helpers/error');
 
-const post = (req, res) => {
+const post = (req, res, next) => {
   const { username, password } = req.body;
 
+  // passport.authenticate('local', { session: false }, (err, user, info) => {});
+
   Users.findOne({ username }, (err, user) => {
-    if (err) return console.log(err);
+    if (err) return next(new ErrorHandler(500, 'Internal server error'));
 
     if (!user) {
-      const error = new ErrorHandler(400, 'User not found');
-      return handleError(error, res);
+      return next(new ErrorHandler(400, 'User not found'));
     }
     res.json(user);
   });
