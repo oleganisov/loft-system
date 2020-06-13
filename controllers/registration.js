@@ -10,9 +10,20 @@ const post = (req, res, next) => {
       return next(new ErrorHandler(400, 'Username is already in use'));
     }
 
-    const adminUser = new Users({ username, surName, firstName, middleName });
-    adminUser.setPassword(password);
-    adminUser.save((err, user) => {
+    const newUser = new Users({
+      username,
+      surName,
+      firstName,
+      middleName,
+      image: '',
+      permission: {
+        chat: { C: true, R: true, U: true, D: true },
+        news: { C: true, R: true, U: true, D: true },
+        settings: { C: true, R: true, U: true, D: true }
+      }
+    });
+    newUser.setPassword(password);
+    newUser.save((err, user) => {
       if (err) return next(new ErrorHandler(500, 'Internal server error'));
       console.log('User created!', user);
       res.json(user);
