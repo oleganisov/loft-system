@@ -17,8 +17,12 @@ const schema = new Schema({
     type: String,
     required: [true, 'Password required']
   },
-  // password: String,
-  image: String
+  image: String,
+  permission: {
+    chat: { C: Boolean, R: Boolean, U: Boolean, D: Boolean },
+    news: { C: Boolean, R: Boolean, U: Boolean, D: Boolean },
+    settings: { C: Boolean, R: Boolean, U: Boolean, D: Boolean }
+  }
 });
 
 schema.methods.setPassword = function (password) {
