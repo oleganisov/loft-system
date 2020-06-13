@@ -21,7 +21,8 @@ const post = async (req, res, next) => {
     });
     const token = await createToken(newUser, secret);
     res.json({
-      statusMessage: 'Ok',
+      status: 'Ok',
+      statusCode: 200,
       data: {
         ...serializeUser(newUser),
         token: token

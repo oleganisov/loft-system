@@ -35,7 +35,7 @@ passport.use(
 passport.use(
   new Strategy(params, function (payload, done) {
     console.log(payload);
-    Users.find({ id: payload.id })
+    Users.findOne({ _id: payload.id })
       .then((user) => {
         if (!user) {
           console.log('Unauthorized');
