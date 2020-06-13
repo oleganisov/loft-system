@@ -4,7 +4,7 @@ require('dotenv').config();
 const { ErrorHandler, handleError } = require('./helpers/error');
 
 const app = express();
-require('./models');
+require('./models/db');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

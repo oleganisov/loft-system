@@ -1,29 +1,25 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
-const uri = process.env.DB_URI;
+const Users = require('./schemas/users');
+// const News = require('./schemas/news');
 
-mongoose.Promise = global.Promise;
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
-});
-
-mongoose.connection.on('connected', () => {
-  console.log(`Mongoose connection open ${uri}`);
-});
-
-mongoose.connection.on('error', (err) => {
-  console.log('Mongoose connection error: ' + err);
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('Mongoose disconnected');
-});
-
-process.on('SIGINT', () => {
-  mongoose.connection.close(() => {
-    console.log('Mongoose connection disconnected app termination');
-    process.exit(1);
+const createUser = async (data) => {
+  const { username, surName, firstName, middleName, password } = data;
+  const newUser = new Users({
+    username,
+    surName,
+    firstName,
+    middleName,
+    image: '',
+    permission: {
+      chat: { C: true, R: true, U: true, D: true },
+      news: { C: true, R: true, U: true, D: true },
+      settings: { C: true, R: true, U: true, D: true }
+    }
   });
-});
+  newUser.setPassword(password);
+  const user = await newUser.save();
+  console.log('User created!', user);
+
+  return user;
+};
+
+module.exports = { createUser };
