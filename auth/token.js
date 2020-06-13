@@ -10,7 +10,7 @@ const createToken = async (user, secret) => {
       expiresIn: '10m'
     }
   );
-  console.log(token, user._id, secret);
+
   return token;
 };
 

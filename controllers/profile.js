@@ -3,7 +3,7 @@ const { ErrorHandler } = require('../helpers/error');
 
 const get = (req, res, next) => {
   Users.find({}, (err, doc) => {
-    if (err) return next(new ErrorHandler(500, 'Internal server error'));
+    if (err) return next(new ErrorHandler(500, err.message));
     res.json(doc);
   });
 };

@@ -10,7 +10,7 @@ const post = (req, res, next) => {
   // passport.authenticate('local', { session: false }, (err, user, info) => {});
 
   Users.findOne({ username }, (err, user) => {
-    if (err) return next(new ErrorHandler(500, 'Internal server error'));
+    if (err) return next(new ErrorHandler(500, err.message));
 
     if (!user) {
       return next(new ErrorHandler(400, 'User not found'));

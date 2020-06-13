@@ -1,5 +1,6 @@
 const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
+const { serializeUser } = require('../helpers/serialize');
 const secret = require('../config/config.json').secret;
 const passport = require('passport');
 const { createToken } = require('../auth/token');
@@ -7,11 +8,11 @@ const { createUser } = require('../models');
 
 const post = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
-    if (err) return next(new ErrorHandler(500, 'Internal server error'));
+    if (err) return next(new ErrorHandler(500, err.message));
     const { username, surName, firstName, middleName, password } = req.body;
 
     Users.findOne({ username }, async (err, user) => {
-      if (err) return next(new ErrorHandler(500, 'Internal server error'));
+      if (err) return next(new ErrorHandler(500, err.message));
       if (user) {
         return next(new ErrorHandler(400, 'Username is already in use'));
       }
@@ -27,7 +28,7 @@ const post = (req, res, next) => {
         res.json({
           statusMessage: 'Ok',
           data: {
-            // ...newUser,
+            ...serializeUser(newUser),
             token: token
           }
         });
