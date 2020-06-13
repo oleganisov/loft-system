@@ -1,42 +1,35 @@
-const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
 const { serializeUser } = require('../helpers/serialize');
 const secret = require('../config/config.json').secret;
-const passport = require('passport');
 const { createToken } = require('../auth/token');
-const { createUser } = require('../models');
+const { createUser, findUserByName } = require('../models');
 
-const post = (req, res, next) => {
-  passport.authenticate('jwt', { session: false }, (err, user, info) => {
-    if (err) return next(new ErrorHandler(500, err.message));
-    const { username, surName, firstName, middleName, password } = req.body;
+const post = async (req, res, next) => {
+  const { username, surName, firstName, middleName, password } = req.body;
+  const user = await findUserByName(username);
 
-    Users.findOne({ username }, async (err, user) => {
-      if (err) return next(new ErrorHandler(500, err.message));
-      if (user) {
-        return next(new ErrorHandler(400, 'Username is already in use'));
-      }
-      try {
-        const newUser = await createUser({
-          username,
-          surName,
-          firstName,
-          middleName,
-          password
-        });
-        const token = await createToken(newUser, secret);
-        res.json({
-          statusMessage: 'Ok',
-          data: {
-            ...serializeUser(newUser),
-            token: token
-          }
-        });
-      } catch (e) {
-        return next(new ErrorHandler(500, e.message));
+  if (user) {
+    return next(new ErrorHandler(400, 'Username is already in use'));
+  }
+  try {
+    const newUser = await createUser({
+      username,
+      surName,
+      firstName,
+      middleName,
+      password
+    });
+    const token = await createToken(newUser, secret);
+    res.json({
+      statusMessage: 'Ok',
+      data: {
+        ...serializeUser(newUser),
+        token: token
       }
     });
-  })(req, res, next);
+  } catch (e) {
+    return next(new ErrorHandler(500, e.message));
+  }
 };
 
 module.exports = { post };

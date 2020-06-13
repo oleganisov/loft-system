@@ -21,5 +21,8 @@ const createUser = async (data) => {
 
   return user;
 };
+const findUserByName = async (username) => {
+  return Users.findOne({ username });
+};
 
-module.exports = { createUser };
+module.exports = { createUser, findUserByName };
