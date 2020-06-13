@@ -1,4 +1,4 @@
-const Users = require('../models/users');
+const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
 
 const get = (req, res, next) => {

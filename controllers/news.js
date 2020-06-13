@@ -1,4 +1,4 @@
-const News = require('../models/news');
+const News = require('../models/schemas/news');
 const { ErrorHandler } = require('../helpers/error');
 
 const get = (req, res, next) => {

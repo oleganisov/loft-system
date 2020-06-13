@@ -1,11 +1,11 @@
-const Users = require('../models/users');
+const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
 const secret = require('../config/config.json').secret;
-const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const { createToken } = require('../auth/token');
 
 const post = (req, res, next) => {
-  passport.authenticate('local', { session: false }, (err, user, info) => {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err) return next(new ErrorHandler(500, 'Internal server error'));
     const { username, surName, firstName, middleName, password } = req.body;
 
@@ -28,18 +28,11 @@ const post = (req, res, next) => {
         }
       });
       newUser.setPassword(password);
-      newUser.save((err, user) => {
+      newUser.save(async (err, user) => {
         if (err) return next(new ErrorHandler(500, 'Internal server error'));
         if (user) {
-          const token = jwt.sign(
-            {
-              id: user.id
-            },
-            secret,
-            {
-              expiresIn: '10m'
-            }
-          );
+          console.log(user, secret);
+          const token = await createToken(user, secret);
           res.json({
             statusMessage: 'Ok',
             data: {

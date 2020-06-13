@@ -1,4 +1,4 @@
-const Users = require('../models/users');
+const Users = require('../models/schemas/users');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const secret = require('../config/config.json').secret;
