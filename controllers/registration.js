@@ -1,7 +1,7 @@
 const { ErrorHandler } = require('../helpers/error');
 const { serializeUser } = require('../helpers/serialize');
 const secret = require('../config/config.json').secret;
-const { createToken } = require('../auth/token');
+const { createTokens } = require('../auth/token');
 const { createUser, findUserByName } = require('../models');
 
 const post = async (req, res, next) => {
@@ -19,13 +19,13 @@ const post = async (req, res, next) => {
       middleName,
       password
     });
-    const token = await createToken(newUser, secret);
+    const tokens = await createTokens(newUser, secret);
     res.json({
       status: 'Ok',
       statusCode: 200,
       data: {
         ...serializeUser(newUser),
-        token: token
+        ...tokens
       }
     });
   } catch (e) {
