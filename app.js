@@ -20,7 +20,7 @@ app.use((_, res, next) => {
   );
   next();
 });
-require('./config/config-passport');
+require('./auth/config-passport');
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
