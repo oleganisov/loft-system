@@ -8,7 +8,7 @@ const createTokens = async (user) => {
     },
     secret,
     {
-      expiresIn: '20m'
+      expiresIn: '60m'
     }
   );
   const refreshToken = await jwt.sign(
