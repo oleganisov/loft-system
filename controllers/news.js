@@ -3,10 +3,15 @@ const { ErrorHandler } = require('../helpers/error');
 const { getUserIdFromToken } = require('../auth/token');
 
 const get = (req, res, next) => {
-  News.find({}, (err, doc) => {
-    if (err) return next(new ErrorHandler(500, err.message));
-    res.json(doc);
-  });
+  News.find({})
+    .populate({
+      path: 'user',
+      select: 'surName firstName middleName username image'
+    })
+    .exec((err, doc) => {
+      if (err) return next(new ErrorHandler(500, err.message));
+      res.json(doc);
+    });
 };
 const post = async (req, res, next) => {
   const { text, title } = req.body;
@@ -48,10 +53,15 @@ const patch = (req, res, next) => {
 const del = (req, res, next) => {
   News.findByIdAndDelete(req.params.id, (err, doc) => {
     if (err) return next(new ErrorHandler(500, err.message));
-    News.find({}, (err, doc) => {
-      if (err) return next(new ErrorHandler(500, err.message));
-      res.json(doc);
-    });
+    News.find({})
+      .populate({
+        path: 'user',
+        select: 'surName firstName middleName username image'
+      })
+      .exec((err, doc) => {
+        if (err) return next(new ErrorHandler(500, err.message));
+        res.json(doc);
+      });
   });
 };
 
