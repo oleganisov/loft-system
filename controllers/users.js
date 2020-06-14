@@ -2,10 +2,14 @@ const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
 
 const get = (req, res, next) => {
-  Users.find({}, (err, doc) => {
-    if (err) return next(new ErrorHandler(500, err.message));
-    res.json(doc);
-  });
+  Users.find(
+    {},
+    'surName firstName middleName username image permission',
+    (err, doc) => {
+      if (err) return next(new ErrorHandler(500, err.message));
+      res.json(doc);
+    }
+  );
 };
 
 const del = (req, res, next) => {
