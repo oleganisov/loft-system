@@ -13,10 +13,14 @@ const get = (req, res, next) => {
 };
 
 const del = (req, res, next) => {
-  Users.findByIdAndDelete(req.params.id, (err, doc) => {
-    if (err) return next(new ErrorHandler(500, err.message));
-    res.json(doc);
-  });
+  Users.findByIdAndDelete(
+    req.params.id,
+    { select: 'surName firstName middleName username image' },
+    (err, doc) => {
+      if (err) return next(new ErrorHandler(500, err.message));
+      res.json(doc);
+    }
+  );
 };
 
 const patch = (req, res, next) => {
