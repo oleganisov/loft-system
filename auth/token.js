@@ -1,13 +1,14 @@
 const jwt = require('jsonwebtoken');
+const secret = require('../config/config.json').secret;
 
-const createTokens = async (user, secret) => {
+const createTokens = async (user) => {
   const accessToken = await jwt.sign(
     {
       id: user._id
     },
     secret,
     {
-      expiresIn: '10m'
+      expiresIn: '20m'
     }
   );
   const refreshToken = await jwt.sign(
@@ -30,6 +31,13 @@ const createTokens = async (user, secret) => {
   };
 };
 
+const getUserIdFromToken = async (token) => {
+  const userId = jwt.verify(token, secret).id;
+
+  return userId;
+};
+
 module.exports = {
-  createTokens
+  createTokens,
+  getUserIdFromToken
 };

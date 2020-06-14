@@ -34,7 +34,6 @@ passport.use(
 // JWT Strategy
 passport.use(
   new Strategy(params, function (payload, done) {
-    console.log(payload);
     Users.findOne({ _id: payload.id })
       .then((user) => {
         if (!user) {

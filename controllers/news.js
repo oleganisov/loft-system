@@ -1,5 +1,6 @@
 const News = require('../models/schemas/news');
 const { ErrorHandler } = require('../helpers/error');
+const { getUserIdFromToken } = require('../auth/token');
 
 const get = (req, res, next) => {
   News.find({}, (err, doc) => {
@@ -7,17 +8,25 @@ const get = (req, res, next) => {
     res.json(doc);
   });
 };
-const post = (req, res, next) => {
+const post = async (req, res, next) => {
   const { text, title } = req.body;
+  const token = req.headers.authorization;
 
-  News.create({ title, text }, (err, doc) => {
+  const userId = await getUserIdFromToken(token.replace('Bearer ', ''));
+
+  News.create({ title, text, user: userId }, (err, doc) => {
     if (err) return next(new ErrorHandler(500, err.message));
     console.log('Сохранен объект:', doc);
 
-    News.find({}, (err, doc) => {
-      if (err) return next(new ErrorHandler(500, err.message));
-      res.json(doc);
-    });
+    News.find({})
+      .populate({
+        path: 'user',
+        select: 'surName firstName middleName username image'
+      })
+      .exec((err, doc) => {
+        if (err) return next(new ErrorHandler(500, err.message));
+        res.json(doc);
+      });
   });
 };
 const patch = (req, res, next) => {
