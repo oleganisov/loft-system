@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const secret = require('../config/config.json').secret;
+const { serializeUser } = require('../helpers/serialize');
+const { findUserById } = require('../models');
 
 const createTokens = async (user) => {
   const accessToken = await jwt.sign(
@@ -36,8 +38,22 @@ const getUserIdFromToken = async (token) => {
 
   return userId;
 };
+const refreshTokens = async (refreshToken) => {
+  const userId = await getUserIdFromToken(refreshToken);
+  const user = await findUserById(userId);
+
+  if (user) {
+    return {
+      ...serializeUser(user),
+      ...(await createTokens(user))
+    };
+  } else {
+    return {};
+  }
+};
 
 module.exports = {
   createTokens,
-  getUserIdFromToken
+  getUserIdFromToken,
+  refreshTokens
 };

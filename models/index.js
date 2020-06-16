@@ -1,5 +1,5 @@
 const Users = require('./schemas/users');
-const News = require('./schemas/news');
+// const News = require('./schemas/news');
 
 const createUser = async (data) => {
   const { username, surName, firstName, middleName, password } = data;
@@ -24,5 +24,8 @@ const createUser = async (data) => {
 const findUserByName = async (username) => {
   return Users.findOne({ username });
 };
+const findUserById = async (userId) => {
+  return Users.findById(userId);
+};
 
-module.exports = { createUser, findUserByName };
+module.exports = { createUser, findUserByName, findUserById };
