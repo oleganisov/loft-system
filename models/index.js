@@ -1,5 +1,5 @@
 const Users = require('./schemas/users');
-// const News = require('./schemas/news');
+const News = require('./schemas/news');
 
 const createUser = async (data) => {
   const { username, surName, firstName, middleName, password } = data;
