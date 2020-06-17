@@ -15,13 +15,9 @@ const post = (req, res, next) => {
       }
       if (user) {
         const tokens = await createTokens(user);
-        res.json({
-          status: 'Ok',
-          statusCode: 200,
-          data: {
-            ...serializeUser(user),
-            ...tokens
-          }
+        res.send({
+          ...serializeUser(user),
+          ...tokens
         });
       }
     }
