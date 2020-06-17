@@ -32,6 +32,13 @@ schema.methods.setPassword = function (password) {
 schema.methods.validPassword = function (password) {
   return bCrypt.compareSync(password, this.hash);
 };
+schema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret._id;
+  }
+});
 
 const Users = mongoose.model('Users', schema);
 
