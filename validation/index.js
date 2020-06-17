@@ -34,5 +34,23 @@ const validateRegistration = (req, res, next) => {
   }
   next();
 };
+const validateProfile = (req, res, next) => {
+  const schema = Joi.object({
+    firstName: Joi.string(),
+    middleName: Joi.string(),
+    surName: Joi.string(),
+    oldPassword: Joi.string()
+      .required()
+      .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+    newPassword: Joi.ref('oldPassword')
+  });
+  const { error } = schema.validate(req.body);
+  if (error) {
+    const message = error.details.map((el) => el.message).join('; ');
 
-module.exports = { validatelogin, validateRegistration };
+    return next(new ErrorHandler(400, message));
+  }
+  next();
+};
+
+module.exports = { validatelogin, validateRegistration, validateProfile };
