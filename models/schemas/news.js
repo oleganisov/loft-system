@@ -8,6 +8,14 @@ const schema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'Users' }
 });
 
+schema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret._id;
+  }
+});
+
 const News = mongoose.model('News', schema);
 
 module.exports = News;
