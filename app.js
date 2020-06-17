@@ -17,7 +17,10 @@ require('./auth/config-passport');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  path.join(__dirname, 'public', 'upload'),
+  express.static(path.join(__dirname, 'public'))
+);
 app.use('/api', require(path.join(__dirname, 'api')));
 
 // catch 404 and forward to error handler
