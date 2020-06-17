@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-require('dotenv').config();
 const { ErrorHandler, handleError } = require('./helpers/error');
 
 const app = express();
@@ -31,8 +30,4 @@ app.use((err, req, res, next) => {
   handleError(err, res);
 });
 
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => {
-  console.log(`Server listen on port ${port}`);
-});
+module.exports = app;
