@@ -1,7 +1,7 @@
 const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
 const { serializeUser } = require('../helpers/serialize');
-const { getUserIdFromToken } = require('../auth/token');
+const { getUserIdFromToken, getUserFromToken } = require('../auth/token');
 const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
@@ -22,7 +22,9 @@ const get = async (req, res, next) => {
 
 const patch = async (req, res, next) => {
   const token = req.headers.authorization;
-  const userId = await getUserIdFromToken(token);
+  const user = await getUserFromToken(token);
+  let image;
+
   const upload = path.join('public', 'upload');
   fs.mkdirSync(upload, { recursive: true });
 
@@ -32,20 +34,28 @@ const patch = async (req, res, next) => {
     if (err) return next(new ErrorHandler(500, err.message));
 
     const { firstName, middleName, surName, oldPassword, newPassword } = fields;
-    const destPath = path.join(upload, file.avatar.name);
-
-    fs.rename(file.avatar.path, destPath, (err) => {
-      if (err) return next(new ErrorHandler(500, err.message));
-    });
-    Users.findByIdAndUpdate(
-      userId,
-      { $set: { firstName, middleName, surName, image: destPath } },
-      { new: true },
-      (err, user) => {
+    if (file.avatar) {
+      image = path.join(upload, file.avatar.name);
+      fs.rename(file.avatar.path, image, (err) => {
         if (err) return next(new ErrorHandler(500, err.message));
-        res.json(serializeUser(user));
+      });
+    }
+
+    if (newPassword) {
+      if (!user.validPassword(oldPassword)) {
+        return next(new ErrorHandler(418, 'Invalid password!'));
+      } else {
+        user.setPassword(newPassword);
       }
-    );
+    }
+
+    user.firstName = firstName;
+    user.middleName = middleName;
+    user.surName = surName;
+    user.image = image;
+    user.save();
+
+    res.json(serializeUser(user));
   });
 };
 
