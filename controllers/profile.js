@@ -4,7 +4,7 @@ const { getUserIdFromToken } = require('../auth/token');
 
 const get = async (req, res, next) => {
   const token = req.headers.authorization;
-  const userId = await getUserIdFromToken(token.replace('Bearer ', ''));
+  const userId = await getUserIdFromToken(token);
   console.log(userId);
   Users.findById(
     userId,
@@ -19,7 +19,7 @@ const get = async (req, res, next) => {
 const patch = async (req, res, next) => {
   const { firstName, middleName, surName, oldPassword, newPassword } = req.body;
   const token = req.headers.authorization;
-  const userId = await getUserIdFromToken(token.replace('Bearer ', ''));
+  const userId = await getUserIdFromToken(token);
   console.log(firstName, middleName, surName, oldPassword, newPassword, userId);
   Users.findByIdAndUpdate(
     userId,

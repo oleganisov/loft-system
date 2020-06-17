@@ -2,7 +2,7 @@ const { refreshTokens } = require('../auth/token');
 
 const post = async (req, res) => {
   const refreshToken = req.headers.authorization;
-  const data = await refreshTokens(refreshToken.replace('Bearer ', ''));
+  const data = await refreshTokens(refreshToken);
 
   res.json({ ...data });
 };

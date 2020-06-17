@@ -38,6 +38,13 @@ const getUserIdFromToken = async (token) => {
 
   return userId;
 };
+const getUserFromToken = async (token) => {
+  const userId = await getUserIdFromToken(token);
+  const user = await findUserById(userId);
+
+  return user;
+};
+
 const refreshTokens = async (refreshToken) => {
   const userId = await getUserIdFromToken(refreshToken);
   const user = await findUserById(userId);
@@ -55,5 +62,6 @@ const refreshTokens = async (refreshToken) => {
 module.exports = {
   createTokens,
   getUserIdFromToken,
+  getUserFromToken,
   refreshTokens
 };

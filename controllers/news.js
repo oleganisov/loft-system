@@ -17,7 +17,7 @@ const post = async (req, res, next) => {
   const { text, title } = req.body;
   const token = req.headers.authorization;
 
-  const userId = await getUserIdFromToken(token.replace('Bearer ', ''));
+  const userId = await getUserIdFromToken(token);
 
   News.create({ title, text, user: userId }, (err, doc) => {
     if (err) return next(new ErrorHandler(500, err.message));

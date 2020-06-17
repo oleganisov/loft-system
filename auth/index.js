@@ -1,13 +1,28 @@
-const passport = require('passport');
+// const passport = require('passport');
 const { ErrorHandler } = require('../helpers/error');
-const auth = (req, res, next) => {
-  passport.authenticate('jwt', { session: false }, (err, user, info) => {
-    if (!user || err) {
+const { getUserFromToken } = require('../auth/token');
+
+// const auth = (req, res, next) => {
+//   passport.authenticate('jwt', { session: false }, (err, user, info) => {
+//     if (!user || err) {
+//       return next(new ErrorHandler(401, 'Unauthorized'));
+//     } else {
+//       next();
+//     }
+//   })(req, res, next);
+// };
+const auth = async (req, res, next) => {
+  const token = req.headers.authorization;
+  try {
+    const user = await getUserFromToken(token);
+    if (!user) {
       return next(new ErrorHandler(401, 'Unauthorized'));
     } else {
       next();
     }
-  })(req, res, next);
+  } catch (e) {
+    return next(new ErrorHandler(500, e.message));
+  }
 };
 
 module.exports = auth;
