@@ -14,7 +14,7 @@ const get = async (req, res, next) => {
     userId,
     'surName firstName middleName username image permission',
     (err, doc) => {
-      if (err) return next(new ErrorHandler(500, err.message));
+      if (err) return next(new ErrorHandler(401, err.message));
       res.json(doc);
     }
   );
