@@ -1,6 +1,6 @@
 // const passport = require('passport');
 const { ErrorHandler } = require('../helpers/error');
-const { getUserFromToken } = require('../auth/token');
+const { getUserFromToken } = require('./token');
 
 // const auth = (req, res, next) => {
 //   passport.authenticate('jwt', { session: false }, (err, user, info) => {
@@ -21,7 +21,7 @@ const auth = async (req, res, next) => {
       next();
     }
   } catch (e) {
-    return next(new ErrorHandler(500, e.message));
+    return next(new ErrorHandler(401, e.message));
   }
 };
 
