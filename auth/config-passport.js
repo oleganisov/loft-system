@@ -2,7 +2,7 @@ const passport = require('passport');
 const passportJWT = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const Users = require('../models/schemas/users');
-const secret = require('../config/config.json').secret;
+const secret = process.env.SECRET;
 
 const ExtractJWT = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;

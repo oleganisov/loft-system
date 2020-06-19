@@ -4,7 +4,18 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
   title: String,
   text: String,
-  created_at: { type: Date, default: Date.now },
+  created_at: {
+    type: Date,
+    default: Date.now,
+    get: (createdAt) => {
+      return createdAt.toLocaleDateString('ru-RU', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+  },
   user: { type: Schema.Types.ObjectId, ref: 'Users' }
 });
 

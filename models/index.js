@@ -8,7 +8,8 @@ const createUser = async (data) => {
     surName,
     firstName,
     middleName,
-    image: '',
+    image:
+      'https://icons-for-free.com/iconfiles/png/512/profile+user+icon-1320166082804563970.png',
     permission: {
       chat: { C: true, R: true, U: true, D: true },
       news: { C: true, R: true, U: true, D: true },

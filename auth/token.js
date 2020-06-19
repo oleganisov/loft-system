@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
-const secret = require('../config/config.json').secret;
 const { serializeUser } = require('../helpers/serialize');
 const { findUserById } = require('../models');
-
+const secret = process.env.SECRET;
 const createTokens = async (user) => {
   const accessToken = await jwt.sign(
     {
