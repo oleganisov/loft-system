@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const { ErrorHandler } = require('../helpers/error');
+const { ErrorHandler } = require('./error');
 
 const validatelogin = (req, res, next) => {
   const schema = Joi.object({
