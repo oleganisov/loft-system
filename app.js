@@ -41,10 +41,10 @@ app.use((err, req, res, next) => {
 });
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server listen on port ${port}`);
 });
 
 chat(io);
 
-module.exports = app;
+module.exports = { app, server };
