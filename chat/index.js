@@ -5,29 +5,27 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     const socketId = socket.id;
 
-    socket.on('users:connect', (data) => {
-      const user = { ...data, socketId, activeRoom: null };
+    socket.on('users:connect', ({ userId, username }) => {
+      const user = { userId, username, socketId, activeRoom: null };
       connectedUsers[socketId] = user;
 
-      console.log('connectedUser: ' + socketId);
-      console.log(data, socketId);
+      console.log('connectedUser: ' + username);
+
       socket.emit('users:list', Object.values(connectedUsers));
       socket.broadcast.emit('users:add', user);
     });
 
-    socket.on('message:add', function (data) {
-      console.log('message:add');
-      console.log(data);
-      const { senderId, recipientId } = data;
+    socket.on('message:add', (data) => {
+      console.log('message:add ', data);
+      const { senderId, recipientId, roomId } = data;
       socket.emit('message:add', data);
-      socket.broadcast.to(data.roomId).emit('message:add', data);
+      socket.broadcast.to(roomId).emit('message:add', data);
       addMessageToHistory(senderId, recipientId, data);
       addMessageToHistory(recipientId, senderId, data);
     });
 
-    socket.on('message:history', function (data) {
-      console.log('message:history');
-      console.log(data);
+    socket.on('message:history', (data) => {
+      console.log('message:history ', data);
       console.log(historyMessage);
       if (
         historyMessage[data.userId] &&
@@ -41,7 +39,7 @@ module.exports = (io) => {
       }
     });
 
-    socket.on('disconnect', function (data) {
+    socket.on('disconnect', (data) => {
       delete connectedUsers[socketId];
       socket.broadcast.emit('users:leave', socketId);
     });
