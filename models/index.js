@@ -1,5 +1,5 @@
 const Users = require('./schemas/users');
-// const News = require('./schemas/news');
+const News = require('./schemas/news');
 
 const createUser = async (data) => {
   const { username, surName, firstName, middleName, password } = data;
@@ -22,11 +22,40 @@ const createUser = async (data) => {
 
   return user;
 };
+
 const findUserByName = async (username) => {
   return Users.findOne({ username });
 };
+
 const findUserById = async (userId) => {
   return Users.findById(userId);
 };
 
-module.exports = { createUser, findUserByName, findUserById };
+const findNews = async () => {
+  return await News.find({}, 'title text created_at user').populate({
+    path: 'user',
+    select: 'surName firstName middleName username image'
+  });
+};
+
+const createNews = async ({ title, text, user }) => {
+  return await News.create({ title, text, user });
+};
+
+const findNewsByIdAndUpdate = async ({ id, title, text }) => {
+  return await News.findByIdAndUpdate(id, { $set: { title, text } });
+};
+
+const findNewsByIdAndDelete = async (id) => {
+  return await News.findByIdAndDelete(id);
+};
+
+module.exports = {
+  createUser,
+  findUserByName,
+  findUserById,
+  createNews,
+  findNews,
+  findNewsByIdAndUpdate,
+  findNewsByIdAndDelete
+};
