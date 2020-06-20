@@ -31,6 +31,30 @@ const findUserById = async (userId) => {
   return Users.findById(userId);
 };
 
+const findUsers = async () => {
+  return await Users.find(
+    {},
+    'surName firstName middleName username image permission'
+  );
+};
+
+const findUserByIdAndDelete = async (id) => {
+  return await Users.findByIdAndDelete(id, {
+    select: 'surName firstName middleName username image'
+  });
+};
+
+const findUserByIdAndUpdate = async (id, permission) => {
+  return await Users.findByIdAndUpdate(
+    id,
+    { $set: { permission } },
+    {
+      new: true,
+      select: 'surName firstName middleName username image permission'
+    }
+  );
+};
+
 const findNews = async () => {
   return await News.find({}, 'title text created_at user').populate({
     path: 'user',
@@ -54,6 +78,9 @@ module.exports = {
   createUser,
   findUserByName,
   findUserById,
+  findUsers,
+  findUserByIdAndDelete,
+  findUserByIdAndUpdate,
   createNews,
   findNews,
   findNewsByIdAndUpdate,
