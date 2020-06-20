@@ -28,7 +28,10 @@ const findUserByName = async (username) => {
 };
 
 const findUserById = async (userId) => {
-  return Users.findById(userId);
+  return await Users.findById(
+    userId,
+    'surName firstName middleName username image permission'
+  );
 };
 
 const findUsers = async () => {

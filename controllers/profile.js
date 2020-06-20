@@ -1,23 +1,21 @@
-const Users = require('../models/schemas/users');
 const { ErrorHandler } = require('../helpers/error');
 const { serializeUser } = require('../helpers/serialize');
 const { getUserIdFromToken, getUserFromToken } = require('../auth/token');
 const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
+const { findUserById } = require('../models');
 
 const get = async (req, res, next) => {
-  const token = req.headers.authorization;
-  const userId = await getUserIdFromToken(token);
+  try {
+    const token = req.headers.authorization;
+    const userId = await getUserIdFromToken(token);
+    const user = await findUserById(userId);
 
-  Users.findById(
-    userId,
-    'surName firstName middleName username image permission',
-    (err, doc) => {
-      if (err) return next(new ErrorHandler(401, err.message));
-      res.json(doc);
-    }
-  );
+    res.json(user);
+  } catch (e) {
+    return next(new ErrorHandler(401, e.message));
+  }
 };
 
 const patch = async (req, res, next) => {
