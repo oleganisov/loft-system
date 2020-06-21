@@ -1,5 +1,6 @@
 const Users = require('./schemas/users');
 const News = require('./schemas/news');
+const { serializeNews } = require('../helpers/serialize');
 
 const createUser = async (data) => {
   const { username, surName, firstName, middleName, password } = data;
@@ -59,10 +60,11 @@ const findUserByIdAndUpdate = async (id, permission) => {
 };
 
 const findNews = async () => {
-  return await News.find({}, 'title text created_at user').populate({
+  const news = await News.find({}, 'title text created_at user').populate({
     path: 'user',
     select: 'surName firstName middleName username image'
   });
+  return news.map((news) => serializeNews(news));
 };
 
 const createNews = async ({ title, text, user }) => {
