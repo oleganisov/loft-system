@@ -5,10 +5,11 @@ let token;
 
 beforeAll(async () => {
   const response = await request(app).post('/api/login').send({
-    username: 'stasik',
-    password: 'youvan'
+    username: 'ustas',
+    password: 'ustas'
   });
-  token = response.body.data.accessToken;
+
+  token = response.body.accessToken;
 });
 afterAll(async () => {
   await new Promise((resolve) => setTimeout(() => resolve(), 500)); // avoid jest open handle error
@@ -23,7 +24,7 @@ describe('GET /api/news', () => {
   it('responds with JSON', async () => {
     const response = await request(app)
       .get('/api/news')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Authorization', token);
     expect(response.statusCode).toBe(200);
     expect(response.type).toBe('application/json');
   });

@@ -39,11 +39,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   handleError(err, res);
 });
-const port = process.env.PORT || 5000;
-
-server.listen(port, () => {
-  console.log(`Server listen on port ${port}`);
-});
 
 chat(io);
 
