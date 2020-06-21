@@ -49,12 +49,7 @@ schema.pre('save', function (next) {
 });
 
 schema.methods.comparePassword = async function (candidatePassword) {
-  try {
-    const isMatch = await bcrypt.compare(candidatePassword, this.password);
-    return isMatch;
-  } catch (e) {
-    return new ErrorHandler(500, e.message);
-  }
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 schema.set('toJSON', {

@@ -40,11 +40,15 @@ const patch = async (req, res, next) => {
     }
 
     if (newPassword) {
-      const isMatch = await user.comparePassword(oldPassword);
-      if (!isMatch) {
-        return next(new ErrorHandler(403, 'Invalid password!'));
+      try {
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+          return next(new ErrorHandler(418, 'Invalid password!'));
+        }
+        user.password = newPassword;
+      } catch (e) {
+        return new ErrorHandler(500, e.message);
       }
-      user.password = newPassword;
     }
 
     user.firstName = firstName;

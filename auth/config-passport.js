@@ -3,6 +3,7 @@ const passportJWT = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const Users = require('../models/schemas/users');
 const secret = process.env.SECRET;
+const { ErrorHandler } = require('../helpers/error');
 
 const ExtractJWT = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
@@ -21,10 +22,15 @@ passport.use(
       if (!user) {
         return done(null, false);
       }
-      const isMatch = await user.comparePassword(password);
-      if (!isMatch) {
-        return done(null, false);
+      try {
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+          return done(null, false);
+        }
+      } catch (e) {
+        return new ErrorHandler(500, e.message);
       }
+
       return done(null, user);
     });
   })
