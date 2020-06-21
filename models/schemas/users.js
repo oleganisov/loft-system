@@ -49,7 +49,6 @@ schema.pre('save', function (next) {
 });
 
 schema.methods.comparePassword = async function (candidatePassword) {
-  console.log(candidatePassword, this);
   try {
     const isMatch = await bcrypt.compare(candidatePassword, this.password);
     return isMatch;

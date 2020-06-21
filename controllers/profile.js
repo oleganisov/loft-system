@@ -12,7 +12,7 @@ const get = async (req, res, next) => {
     const userId = await getUserIdFromToken(token);
     const user = await findUserById(userId);
 
-    res.json(user);
+    res.json(serializeUser(user));
   } catch (e) {
     return next(new ErrorHandler(401, e.message));
   }
