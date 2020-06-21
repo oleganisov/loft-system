@@ -54,7 +54,7 @@ const patch = async (req, res, next) => {
     user.firstName = firstName;
     user.middleName = middleName;
     user.surName = surName;
-    user.image = image;
+    user.image = image || user.image;
     user.save();
 
     res.json(serializeUser(user));
