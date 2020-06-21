@@ -13,22 +13,21 @@ const params = {
 
 // LocalStrategy
 passport.use(
-  new LocalStrategy(
-    { usernameField: 'username' },
-    (username, password, done) => {
-      Users.findOne({ username })
-        .then((user) => {
-          if (!user) {
-            return done(null, false);
-          }
-          if (!user.validPassword(password)) {
-            return done(null, false);
-          }
-          return done(null, user);
-        })
-        .catch((err) => done(err));
-    }
-  )
+  new LocalStrategy((username, password, done) => {
+    Users.findOne({ username }, async (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        return done(null, false);
+      }
+      return done(null, user);
+    });
+  })
 );
 
 // JWT Strategy

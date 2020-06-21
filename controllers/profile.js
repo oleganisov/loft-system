@@ -28,7 +28,7 @@ const patch = async (req, res, next) => {
 
   const form = formidable({ uploadDir: upload, maxFileSize: 300 * 1024 });
 
-  form.parse(req, (err, fields, file) => {
+  form.parse(req, async (err, fields, file) => {
     if (err) return next(new ErrorHandler(500, err.message));
 
     const { firstName, middleName, surName, oldPassword, newPassword } = fields;
@@ -40,11 +40,11 @@ const patch = async (req, res, next) => {
     }
 
     if (newPassword) {
-      if (!user.validPassword(oldPassword)) {
-        return next(new ErrorHandler(418, 'Invalid password!'));
-      } else {
-        user.setPassword(newPassword);
+      const isMatch = await user.comparePassword(oldPassword);
+      if (!isMatch) {
+        return next(new ErrorHandler(403, 'Invalid password!'));
       }
+      user.password = newPassword;
     }
 
     user.firstName = firstName;

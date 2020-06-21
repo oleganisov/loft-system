@@ -5,6 +5,7 @@ const createUser = async (data) => {
   const { username, surName, firstName, middleName, password } = data;
   const newUser = new Users({
     username,
+    password,
     surName,
     firstName,
     middleName,
@@ -16,7 +17,6 @@ const createUser = async (data) => {
       settings: { C: true, R: true, U: true, D: true }
     }
   });
-  newUser.setPassword(password);
   const user = await newUser.save();
   console.log('User created!', user);
 
@@ -30,7 +30,7 @@ const findUserByName = async (username) => {
 const findUserById = async (userId) => {
   return await Users.findById(
     userId,
-    'surName firstName middleName username image permission'
+    'surName firstName middleName username image permission password'
   );
 };
 
