@@ -4,10 +4,13 @@
   "main": "app.js",
   "author": "Oleg Anisov",
   "license": "MIT",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles ",
     "start-dev": "cross-env NODE_ENV=development nodemon server.js",
-    "start-prod": "cross-env NODE_ENV=production node server.js"
+    "start": "cross-env NODE_ENV=production node server.js"
   },
   "jest": {
     "verbose": true,
