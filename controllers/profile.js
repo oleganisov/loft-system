@@ -23,7 +23,7 @@ const patch = async (req, res, next) => {
   const user = await getUserFromToken(token);
   let image;
 
-  const upload = path.join('public', 'upload');
+  const upload = path.join(process.cwd(), 'upload', 'avatar');
   fs.mkdirSync(upload, { recursive: true });
 
   const form = formidable({ uploadDir: upload, maxFileSize: 300 * 1024 });
@@ -33,10 +33,14 @@ const patch = async (req, res, next) => {
 
     const { firstName, middleName, surName, oldPassword, newPassword } = fields;
     if (file.avatar) {
-      image = path.join(upload, file.avatar.name);
-      fs.rename(file.avatar.path, image, (err) => {
-        if (err) return next(new ErrorHandler(500, err.message));
-      });
+      image = path.join('avatar', file.avatar.name);
+      fs.rename(
+        file.avatar.path,
+        path.join(upload, file.avatar.name),
+        (err) => {
+          if (err) return next(new ErrorHandler(500, err.message));
+        }
+      );
     }
 
     if (newPassword) {

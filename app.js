@@ -24,6 +24,7 @@ require('./auth/config-passport');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'upload')));
 app.use('/api', require(path.join(__dirname, 'api')));
 
 app.use('*', (req, res) => {
