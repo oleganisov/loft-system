@@ -25,7 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.static(path.join(__dirname, 'upload')));
-app.use('/api', require(path.join(__dirname, 'api')));
+app.use('/api', require('./api/auth'));
+app.use('/api', require('./api/users'));
+app.use('/api', require('./api/news'));
 
 app.use('*', (req, res) => {
   const file = path.resolve(__dirname, 'build', 'index.html');
