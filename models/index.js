@@ -64,7 +64,9 @@ const findNews = async () => {
     path: 'user',
     select: 'surName firstName middleName username image'
   });
-  return news.map((news) => serializeNews(news));
+  const newsFiltered = news.filter((item) => item.user !== null);
+
+  return newsFiltered.map((news) => serializeNews(news));
 };
 
 const createNews = async ({ title, text, user }) => {
